@@ -287,7 +287,8 @@ public class MLENN extends SimpleBatchFilter {
 			// Compute once the threshold
 			if (threshold == -1) {
 				threshold = meanHammLoss * m_Threshold;
-				System.out.println ("Threshold: " + threshold);
+				if (getDebug())
+					System.out.println ("Threshold: " + threshold);
 			}
 			
 			// Stop the algorithm
@@ -297,7 +298,8 @@ public class MLENN extends SimpleBatchFilter {
 			// Find uniques and sort.
 			uniqueSortHammLoss = findUniquesAndSort(indivHammLoss);
 		
-			System.out.println ("Hamm loss: " + Arrays.toString(uniqueSortHammLoss));
+			if (getDebug())
+				System.out.println ("Hamm loss: " + Arrays.toString(uniqueSortHammLoss));
 
 			// Stop the algorithm if deletion process would delete all instances
 			if (uniqueSortHammLoss.length == 1)

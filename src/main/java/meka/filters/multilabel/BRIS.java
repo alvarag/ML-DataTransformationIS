@@ -208,7 +208,7 @@ public abstract class BRIS extends SimpleBatchFilter implements Randomizable {
 		for (int i = 1; i < instances.numInstances(); i++)
 			if (remove[i] < threshold)
 				result.add(instances.instance(i));
-
+		
 		return result;
 	}
 	
