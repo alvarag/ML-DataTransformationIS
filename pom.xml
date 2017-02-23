@@ -1,0 +1,62 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <properties>
+    <maven.compiler.source>1.7</maven.compiler.source>
+    <maven.compiler.target>1.7</maven.compiler.target>
+  </properties>
+
+  <groupId>meka</groupId>
+  <artifactId>meka-is-release</artifactId>
+  <version>2016.10</version>  <!-- adjust -->
+
+  <name>Plugin for Meka: Instance Selection Algorithms</name>
+  <description>Instance selection methods for MEKA project.</description>
+  <organization>
+    <name>University of Burgos, Burgos, Spain</name>
+    <url>http://wwww.ubu.es/advanced-data-mining-research-and-bioinformatics-learning-admirable</url>
+  </organization>
+  <licenses>
+    <license>
+      <name>GNU General Public License 3</name>
+      <url>http://www.gnu.org/licenses/gpl-3.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <id>alvarag</id>
+      <name>Álvar Arnaiz-González</name>
+      <email>alvarag@ubu.es</email>
+    </developer>
+  </developers>
+
+  <dependencies>
+    <dependency>
+      <groupId>net.sf.meka</groupId>
+      <artifactId>meka</artifactId>
+      <version>1.9.0</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/lib/meka-1.9.0.jar</systemPath>
+    </dependency>
+
+    <dependency>
+      <groupId>net.sf.meka.thirdparty</groupId>
+      <artifactId>mulan</artifactId>
+      <version>1.4.0</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/lib/mulan-1.4.0.jar</systemPath>
+    </dependency>
+
+    <dependency>
+      <groupId>nz.ac.waikato.cms.weka</groupId>
+      <artifactId>weka-dev</artifactId>
+      <version>3.7.12</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/lib/weka-dev-3.7.12.jar</systemPath>
+    </dependency>
+
+  </dependencies>
+
+</project>
