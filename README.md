@@ -1,5 +1,5 @@
 # BR-IS Instance selection by means of Binary Relevance
-Instance selection algorithms for MEKA. The versions are not optimized and have some limitations, please review the header of each class.
+Instance selection algorithms for MEKA. The implementations of the algorithms are not fully optimized and have some limitations, please review the header of each class.
 
 The original MEKA software is necessary: https://github.com/Waikato/meka
 
@@ -14,6 +14,6 @@ The original MEKA software is necessary: https://github.com/Waikato/meka
 The code was implemented by Álvar Arnaiz-González. The review process of the paper is in progress.
 
 ## Contributions
-Some of the algorithms has been adapted to MEKA by means a wrapper, the original codes are available here:
+Some of the algorithms has been adapted to MEKA by means of a wrapper, their original source codes are available here:
 
 * MLeNN: http://simidat.ujaen.es/papers/mlenn
