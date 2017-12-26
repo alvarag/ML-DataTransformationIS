@@ -54,7 +54,7 @@ public class BRLSS extends BRIS {
 		ArrayList<Integer>[] mLocalSets = new ArrayList[instances.numInstances()];
 		int[] mNearestEnemies = new int[instances.numInstances()];
 		
-		// Ordenar el conjunto temporal en función de la distancia al enemigo más próximo.
+		// Sort the tmp set according to the distance to their nearest enemy.
 		computeLocalSets(instances, mLocalSets, mNearestEnemies);
 			
 		// Computes u(e).
@@ -82,7 +82,7 @@ public class BRLSS extends BRIS {
 	 * @param localSets Local sets.
 	 * @param enemies Array with the enemyies' indexes.
 	 */
-	protected void computeLocalSets (Instances trainSet, ArrayList<Integer>[] localSets, int[] enemies) {
+	protected static void computeLocalSets (Instances trainSet, ArrayList<Integer>[] localSets, int[] enemies) {
 		DistanceFunction distanceFunction;
 		Instance instI, instJ;
 		double[] distances;

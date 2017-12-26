@@ -1,6 +1,6 @@
 /*
- * BRCNN.java
- * Copyright (C) 2016 Burgos University, Burgos, Spain 
+ * LPCNN.java
+ * Copyright (C) 2017 Burgos University, Burgos, Spain 
  * @author Álvar Arnaiz-González
  *     
  * This program is free software: you can redistribute it and/or modify
@@ -26,58 +26,58 @@ import weka.core.neighboursearch.LinearNNSearch;
 import weka.core.neighboursearch.NearestNeighbourSearch;
 
 /**
- * CNN instance selection for ML by means of binary relevance.<br>
- * The threshold is computed using a votation method like DIS.
+ * CNN instance selection for ML by means of label powerset.<br>
  * <p>
- * Valid options are:
- * <p>
- * number of nearest neighbours <br>
- * alpha for fitness function <br>
- * percentage of instances for error computation (in fitness function) <br>
  * 
  * @author Álvar Arnaiz-González
- * @version 20160929
+ * @version 20171226
  */
-public class BRCNN extends BRIS {
+public class LPCNN extends LPIS {
 
-	private static final long serialVersionUID = 1974167341692127687L;
+	private static final long serialVersionUID = -9154050780637146555L;
 
 	@Override
 	public String globalInfo() {
-		
-		return "CNN instance selection by using binary relevance (with voting).";
+
+		return "CNN instance selection by using local powerset.";
 	}
 
 	@Override
-	protected void applyIS(Instances instances, int[] remove) throws Exception {
+	protected Instances determineOutputFormat(Instances inputFormat) throws Exception {
+
+		return new Instances(inputFormat, 0);
+	}
+
+	protected boolean[] applyIS(Instances instances) throws Exception {
 		NearestNeighbourSearch nnSearch;
 		Instances reducedSet = new Instances(instances, instances.numInstances() / 10);
 		Instance inst;
 		Vector<Double> classSelected = new Vector<Double>(instances.classAttribute().numValues());
 		boolean[] selected = new boolean[instances.numInstances()];
-		
-		for (int i = 0; i < remove.length; i++)
+		boolean[] remove = new boolean[instances.numInstances()];
+
+		for (int i = 0; i < instances.numInstances(); i++)
 			selected[i] = false;
-		
+
 		// Starts with an instance of each class.
 		for (int i = 0; i < instances.numInstances(); i++) {
 			inst = instances.instance(i);
-			
+
 			// If any instance of the current's class has been already selected
 			if (!classSelected.contains(inst.classValue())) {
 				selected[i] = true;
 				reducedSet.add(inst);
 				classSelected.add(inst.classValue());
 			}
-			
+
 			// Stop if all classes have been already selected
 			if (classSelected.size() == instances.classAttribute().numValues())
 				i = instances.numInstances();
 		}
-		
+
 		// Init the NN search.
 		nnSearch = new LinearNNSearch(reducedSet);
-		
+
 		// Run CNN.
 		for (int i = 0; i < instances.numInstances(); i++) {
 			if (!selected[i]) {
@@ -90,11 +90,15 @@ public class BRCNN extends BRIS {
 				}
 			}
 		}
-		
-		// Accumulate votes in remove.
-		for (int i = 0; i < instances.numInstances(); i++)
-			if (!selected[i])
-				remove[i]++;
-	}
 
+		// Accumulate votes in remove.
+		for (int i = 0; i < instances.numInstances(); i++) {
+			if (!selected[i])
+				remove[i] = true;
+			else
+				remove[i] = false;
+		}
+
+		return remove;
+	}
 }
