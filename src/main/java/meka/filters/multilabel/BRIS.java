@@ -45,9 +45,10 @@ import weka.filters.SimpleBatchFilter;
  * number of nearest neighbours <br>
  * alpha for fitness function <br>
  * percentage of instances for error computation (in fitness function) <br>
+ * dependent binary relevance <br>
  * 
  * @author Álvar Arnaiz-González
- * @version 20160929
+ * @version 20180330
  */
 public abstract class BRIS extends SimpleBatchFilter implements Randomizable {
 
@@ -68,6 +69,19 @@ public abstract class BRIS extends SimpleBatchFilter implements Randomizable {
 	 */
 	protected double m_PropInstErr = 0.1;
 	
+	/**
+	 * Whether use dependent binary relevance or not. Default: false.
+	 */
+	protected boolean m_Dependent = false;
+	
+	public boolean getDependent() {
+		return m_Dependent;
+	}
+
+	public void setDependent(boolean dependent) {
+		m_Dependent = dependent;
+	}
+
 	@Override
 	public void setSeed(int s) {
 		m_Seed = s;
@@ -111,6 +125,8 @@ public abstract class BRIS extends SimpleBatchFilter implements Randomizable {
 		options.add(new Option("\tAlpha value.", "A", 0, "-A"));
 
 		options.add(new Option("\tProportion of instances for error computation.", "E", 0, "-E"));
+		
+		options.add(new Option("\tUse dependent binary relevance.", "D", 0, "-D"));
 
 		Enumeration<Option> enu = super.listOptions();
 
@@ -144,6 +160,8 @@ public abstract class BRIS extends SimpleBatchFilter implements Randomizable {
 			setPropInstErr(Double.parseDouble(tmpStr));
 		else
 			setPropInstErr(0.1);
+		
+		setDependent(!Utils.getFlag('D', options));
 
 		super.setOptions(options);
 	}
@@ -165,6 +183,9 @@ public abstract class BRIS extends SimpleBatchFilter implements Randomizable {
 
 		result.add("-E");
 		result.add("" + getPropInstErr());
+
+		if (getDependent())
+			result.add("-D");
 
 		return result.toArray(new String[result.size()]);
 	}
@@ -222,20 +243,28 @@ public abstract class BRIS extends SimpleBatchFilter implements Randomizable {
 	 */
 	protected void computeVotes(Instances instances, int[] remove) 
 	                        throws Exception {
+		Instances oneLblDataset;
 		int numLabels = instances.classIndex();
 		
 		// BR
 		for(int j = 0; j < numLabels; j++) {
-			//Select only class attribute 'j'
-			Instances instances_j = MLUtils.keepAttributesAt(new Instances(instances),
-			                                                  new int[]{j},numLabels);
-			instances_j.setClassIndex(0);
-
-			// Generate the dataset
-			Instances tmp = new Instances(instances_j);
+			if (getDependent()) {
+				// Generate the dataset
+				oneLblDataset = new Instances(instances);
+				oneLblDataset.setClassIndex(j);
+			}
+			else {
+				//Select only class attribute 'j'
+				Instances instances_j = MLUtils.keepAttributesAt(new Instances(instances),
+				                                                  new int[]{j},numLabels);
+				instances_j.setClassIndex(0);
+	
+				// Generate the dataset
+				oneLblDataset = new Instances(instances_j);
+			}
 		
 			// Apply IS
-			applyIS (tmp, remove);
+			applyIS (oneLblDataset, remove);
 		}
 	}
 	
