@@ -8,7 +8,7 @@
 
   <groupId>meka</groupId>
   <artifactId>meka-is-release</artifactId>
-  <version>2016.10</version>  <!-- adjust -->
+  <version>2018.04</version>  <!-- adjust -->
 
   <name>Plugin for Meka: Instance Selection Algorithms</name>
   <description>Instance selection methods for MEKA project.</description>
