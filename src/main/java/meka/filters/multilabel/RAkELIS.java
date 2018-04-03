@@ -19,13 +19,16 @@ import weka.filters.Filter;
 
 /**
  * Instance selection for ML by means of RAkEL.<br>
- * The threshold is computed using a votation method like DIS.
+ * The threshold is computed using a voting method like DIS.
  * <p>
  * Valid options are:
  * <p>
  * number of nearest neighbours <br>
  * alpha for fitness function <br>
  * percentage of instances for error computation (in fitness function) <br>
+ * number of labels in each partition <br>
+ * number of subsets <br>
+ * pruning values for frequent/infrequent labels <br>
  * 
  * @author Álvar Arnaiz-González
  * @version 20180402
@@ -76,14 +79,15 @@ public class RAkELIS extends BRIS {
 		for (int i = 0; i < m_M; i++) {
 			if (getDebug())
 				System.out.println("\tpartitioning model " + (i + 1) + "/" + m_M + ": " 
-				                   + Arrays.toString(kMap[i])
-						+ ", P=" + m_P + ", N=" + m_N);
+				                   + Arrays.toString(kMap[i]) + ", P=" + m_P + ", N=" + m_N);
+			
+			// Performs the selection of the desired instances and label powerset.
 			Instances D_i = SuperLabelUtils.makePartitionDataset(instances, kMap[i], m_P, m_N);
 
 			if (getDebug())
 				System.out.println("\tbuilding model " + (i + 1) + "/" + m_M + ": "
 				                    + Arrays.toString(kMap[i]));
-
+			
 			applyIS(D_i, remove);
 		}
 	}
@@ -350,7 +354,7 @@ public class RAkELIS extends BRIS {
 	}
 
 	public String isTipText() {
-		return "The base BR-IS to be used.";
+		return "The base instance selection algorithm to be used.";
 	}
 
 }
