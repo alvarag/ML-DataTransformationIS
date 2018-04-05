@@ -161,8 +161,8 @@ public abstract class BRIS extends SimpleBatchFilter implements Randomizable {
 		else
 			setPropInstErr(0.1);
 		
-		setDependent(!Utils.getFlag('D', options));
-
+		setDependent(Utils.getFlag('D', options));
+		
 		super.setOptions(options);
 	}
 
