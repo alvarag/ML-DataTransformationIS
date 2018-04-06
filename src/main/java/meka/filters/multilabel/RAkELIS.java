@@ -138,7 +138,7 @@ public class RAkELIS extends BRIS {
 	@Override
 	public void setOptions(String[] options) throws Exception {
 		String tmpStr;
-		String instSelecName = Utils.getOption('W', options);
+		String instSelecName = Utils.getOption('I', options);
 
 		if (instSelecName.length() > 0) {
 			setIS((Filter) Utils.forName(LPIS.class, instSelecName, null));
