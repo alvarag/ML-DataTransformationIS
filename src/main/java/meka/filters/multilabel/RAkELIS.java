@@ -23,7 +23,6 @@ import weka.filters.Filter;
  * <p>
  * Valid options are:
  * <p>
- * number of nearest neighbours <br>
  * alpha for fitness function <br>
  * percentage of instances for error computation (in fitness function) <br>
  * number of labels in each partition <br>
@@ -31,7 +30,7 @@ import weka.filters.Filter;
  * pruning values for frequent/infrequent labels <br>
  * 
  * @author Álvar Arnaiz-González
- * @version 20180402
+ * @version 20180411
  */
 public class RAkELIS extends BRIS {
 
@@ -78,15 +77,15 @@ public class RAkELIS extends BRIS {
 
 		for (int i = 0; i < m_M; i++) {
 			if (getDebug())
-				System.out.println("\tpartitioning model " + (i + 1) + "/" + m_M + ": " 
+				System.out.println("\tpartitioning model " + (i + 1) + "/" + m_M + ": "
 				                   + Arrays.toString(kMap[i]) + ", P=" + m_P + ", N=" + m_N);
-			
+
 			// Performs the selection of the desired instances and label powerset.
 			Instances D_i = SuperLabelUtils.makePartitionDataset(instances, kMap[i], m_P, m_N);
 
 			if (getDebug())
 				System.out.println("\tbuilding model " + (i + 1) + "/" + m_M + ": "
-				                    + Arrays.toString(kMap[i]));
+				                   + Arrays.toString(kMap[i]));
 			
 			applyIS(D_i, remove);
 		}
@@ -109,22 +108,20 @@ public class RAkELIS extends BRIS {
 		Vector<Option> result = new Vector<Option>();
 
 		result.addElement(new Option("\tSets M (default 10): the number of subsets", "M", 1, "-M <num>"));
-		
-		result.addElement(new Option(
-				"\tSets the pruning value, defining an infrequent labelset as one which "
-						+ "occurs <= P times in the data (P = 0 defaults to LC).\n\tdefault: " + m_P + "\t(LC)",
-				"P", 1, "-P <value>"));
+
+		result.addElement(new Option("\tSets the pruning value, defining an infrequent labelset as one which "
+		                           + "occurs <= P times in the data (P = 0 defaults to LC).\n\tdefault: " + m_P + "\t(LC)",
+		                           "P", 1, "-P <value>"));
 
 		result.addElement(new Option("\tSets the (maximum) number of frequent labelsets to subsample from the "
-				+ "infrequent labelsets.\n\tdefault: " + m_N + "\t(none)\n\tn\tN = n\n\t-n"
-				+ "\tN = n, or 0 if LCard(D) >= 2\n\tn-m\tN = random(n,m)", "N", 1, "-N <value>"));
+		                           + "infrequent labelsets.\n\tdefault: " + m_N + "\t(none)\n\tn\tN = n\n\t-n"
+		                           + "\tN = n, or 0 if LCard(D) >= 2\n\tn-m\tN = random(n,m)", "N", 1, "-N <value>"));
 
 		result.addElement(new Option("\t" + kTipText(), "k", 1, "-k <num>"));
 
 		result.addElement(new Option("\tFull name of base instance selector.\n" + "\t(default: " + defaultISString()
-				+ ((defaultISOptions().length > 0) ? " with options " + Utils.joinOptions(defaultISOptions()) + ")"
-						: ")"),
-				"W", 1, "-W"));
+		                           + ((defaultISOptions().length > 0) ? " with options " + Utils.joinOptions(defaultISOptions()) 
+		                           + ")": ")"), "W", 1, "-W"));
 
 		result.addAll(Collections.list(super.listOptions()));
 
@@ -137,6 +134,8 @@ public class RAkELIS extends BRIS {
 
 	@Override
 	public void setOptions(String[] options) throws Exception {
+		super.setOptions(options);
+
 		String tmpStr;
 		String instSelecName = Utils.getOption('I', options);
 
@@ -145,17 +144,17 @@ public class RAkELIS extends BRIS {
 			setIS((Filter) Utils.forName(LPIS.class, instSelecName, Utils.partitionOptions(options)));
 		} else {
 			setIS((Filter) Utils.forName(LPIS.class, defaultISString(), null));
-			String[] classifierOptions = Utils.partitionOptions(options);
+			String[] isBaseOptions = Utils.partitionOptions(options);
 
-			if (classifierOptions.length > 0) {
-				setIS((Filter) Utils.forName(LPIS.class, defaultISString(), classifierOptions));
+			if (isBaseOptions.length > 0) {
+				setIS((Filter) Utils.forName(LPIS.class, defaultISString(), isBaseOptions));
 			} else {
 				setIS((Filter) Utils.forName(LPIS.class, defaultISString(), defaultISOptions()));
 			}
 		}
 
 		setM(OptionUtils.parse(options, 'M', 10));
-		
+
 		tmpStr = Utils.getOption('P', options);
 		if (tmpStr.length() != 0)
 			setP(parseValue(tmpStr));
@@ -169,8 +168,6 @@ public class RAkELIS extends BRIS {
 			setN(parseValue("0"));
 
 		setK(OptionUtils.parse(options, 'k', 3));
-
-		super.setOptions(options);
 	}
 
 	private int parseValue(String s) {
@@ -196,7 +193,7 @@ public class RAkELIS extends BRIS {
 		OptionUtils.add(result, 'P', getP());
 		OptionUtils.add(result, 'N', getN());
 		OptionUtils.add(result, 'k', getK());
-		
+
 		OptionUtils.add(result, super.getOptions());
 
 		result.add("-I");
@@ -240,10 +237,11 @@ public class RAkELIS extends BRIS {
 	}
 
 	/**
-	 * Sets the pruning value P, defining an infrequent labelset as one which
-	 * occurs less than P times in the data (P = 0 defaults to LC).
+	 * Sets the pruning value P, defining an infrequent labelset as one which occurs
+	 * less than P times in the data (P = 0 defaults to LC).
 	 * 
-	 * @param p pruning value.
+	 * @param p
+	 *            pruning value.
 	 */
 	public void setP(int p) {
 		m_P = p;
@@ -251,7 +249,7 @@ public class RAkELIS extends BRIS {
 
 	public String pTipText() {
 		return "The pruning value P, defining an infrequent labelset as one which "
-				+ "occurs less than P times in the data (P = 0 defaults to LC).";
+		     + "occurs less than P times in the data (P = 0 defaults to LC).";
 	}
 
 	/**
@@ -266,7 +264,8 @@ public class RAkELIS extends BRIS {
 	/**
 	 * Sets the M parameter (the number of subsets).
 	 * 
-	 * @param m the number of subsets
+	 * @param m
+	 *            the number of subsets
 	 */
 	public void setM(int m) {
 		m_M = m;
@@ -279,8 +278,8 @@ public class RAkELIS extends BRIS {
 	/**
 	 * Gets the subsampling value N.
 	 * 
-	 * @return the (maximum) number of frequent labelsets to subsample 
-	 *          from the infrequent labelsets.
+	 * @return the (maximum) number of frequent labelsets to subsample from the
+	 *         infrequent labelsets.
 	 */
 	public int getN() {
 		return m_N;
@@ -289,8 +288,9 @@ public class RAkELIS extends BRIS {
 	/**
 	 * Sets the subsampling value N.
 	 * 
-	 * @param n the (maximum) number of frequent labelsets to subsample 
-	 *          from the infrequent labelsets.
+	 * @param n
+	 *            the (maximum) number of frequent labelsets to subsample from the
+	 *            infrequent labelsets.
 	 */
 	public void setN(int n) {
 		m_N = n;
@@ -324,7 +324,8 @@ public class RAkELIS extends BRIS {
 	/**
 	 * Set the base IS.
 	 *
-	 * @param newIS the filter to use.
+	 * @param newIS
+	 *            the filter to use.
 	 */
 	public void setIS(Filter newIS) {
 
@@ -350,7 +351,8 @@ public class RAkELIS extends BRIS {
 	protected String getISSpec() {
 		Filter c = getIS();
 
-		return c.getClass().getName() + " " + Utils.joinOptions(((OptionHandler) c).getOptions());
+		return c.getClass().getName() + " " + 
+		          Utils.joinOptions(((OptionHandler) c).getOptions());
 	}
 
 	public String isTipText() {
