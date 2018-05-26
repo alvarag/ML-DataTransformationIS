@@ -16,20 +16,21 @@ The original MEKA software is necessary: https://github.com/Waikato/meka
 * MLENN: Kanj, S., Abdallah, F., Denœux, T., & Tout, K. (2016). Editing training data for multi-label classification with the k-nearest neighbor rule. _Pattern Analysis and Applications_, 19(1), 145-161.
 
 ## Citation policy
- **Á. Arnaiz-González, J-F. Díez Pastor, Juan J. Rodríguez, C. García Osorio.** _Study of data transformation techniques for adapting single-label prototype selection algorithms to  multi-label learning._ Expert Systems with Applications, _in press_. 
+ **Á. Arnaiz-González, J-F. Díez Pastor, Juan J. Rodríguez, C. García Osorio.** _Study of data transformation techniques for adapting single-label prototype selection algorithms to multi-label learning._ Expert Systems with Applications, 109, 114-130. [doi: 10.1016/j.eswa.2018.05.017](https://doi.org/10.1016/j.eswa.2018.05.017)
 
 ```
 @article{ArnaizGonzalez2018,
-  title = "Study of data transformation techniques for adapting single-label prototype selection algorithms to  multi-label learning",
+  title = "Study of data transformation techniques for adapting single-label prototype selection algorithms to multi-label learning",
   journal = "Expert Systems with Applications",
-  volume = "",
-  pages = "",
+  volume = "109",
+  pages = "114 - 130",
   year = "2018",
   issn = "0957-4174",
-  doi = "",
+  doi = "10.1016/j.eswa.2018.05.017",
   author = "\'{A}lvar Arnaiz-Gonz\'{a}lez and Jos\'{e} F. D\'{i}ez-Pastor and Juan J. Rodr\'{i}guez and C\'{e}sar Garc\'{i}a-Osorio"
 }
 ```
+The paper is available online and accessible for free until July 15, 2018 through this link https://authors.elsevier.com/c/1X6pt3PiGT7gPl
 
 ## Contributions
 Some of the algorithms has been adapted to MEKA by means of a wrapper, their original source codes are available here:
